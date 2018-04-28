@@ -64,7 +64,7 @@ int init() {
 int createModelsInWorld(World & world)
 {
 	// Load the model from file
-	std::shared_ptr<Mesh> worldMesh = Mesh::load("data/asian_town.msh.xml");
+	std::shared_ptr<Mesh> worldMesh = Mesh::load("data/bunny.msh.xml");
 	shared_ptr<Model> worldModel = make_shared<Model>(worldMesh);
 	worldModel->setScale(vec3(10.0f, 10.0f, 10.0f));
 
@@ -112,7 +112,7 @@ int main(int, char**) {
 	// Generate a camera and store it in the world
 	shared_ptr<Camera> camera = make_shared<Camera>();
 	camera->setPosition(glm::vec3(0.0f, 0.1f, 0.0f));
-	camera->setClearColor(glm::vec3(135.0f / 255.0f, 206.0f / 255.0f, 235.0f / 255.0f));
+	camera->setClearColor(glm::vec3(0.0f, 0.0f, 0.0f));
 	world.addEntity(camera);
 
 	// Generate the objects in the world

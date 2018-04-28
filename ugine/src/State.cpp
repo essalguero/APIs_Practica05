@@ -6,3 +6,6 @@ std::shared_ptr<Shader>	State::defaultShader = nullptr;
 glm::mat4 State::projectionMatrix;
 glm::mat4 State::viewMatrix;
 glm::mat4 State::modelMatrix;
+
+std::vector<std::shared_ptr<Light>> lights;
+glm::vec3 ambient;

@@ -84,6 +84,7 @@ Shader::Shader(string const & vertexShaderSource, const string & fragmentShaderS
 	vTextureLoc = glGetAttribLocation(id, "vTexture");
 	mvpMatrix = glGetUniformLocation(id, "mvpMatrix");
 
+	vnormalLoc = glGetAttribLocation(id, "vnormal");
 }
 
 
@@ -98,6 +99,12 @@ void Shader::setupAttribs() const {
 		glEnableVertexAttribArray(vTextureLoc);
 		glVertexAttribPointer(vTextureLoc, 2, GL_FLOAT, false, sizeof(Vertex),
 			reinterpret_cast<void*>(offsetof(Vertex, texture)));
+	}
+
+	if (vnormalLoc != -1) {
+		glEnableVertexAttribArray(vnormalLoc);
+		glVertexAttribPointer(vnormalLoc, 3, GL_FLOAT, false, sizeof(Vertex),
+			reinterpret_cast<void*>(offsetof(Vertex, normal)));
 	}
 }
 

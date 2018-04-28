@@ -55,5 +55,7 @@ private:
 	int vTextureLoc;
 
 	int mvpMatrix;
+
+	int vnormalLoc;
 };
 

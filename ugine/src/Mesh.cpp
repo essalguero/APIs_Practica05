@@ -132,6 +132,9 @@ std::shared_ptr<Mesh> Mesh::load(
 {
 	shared_ptr<Mesh> mesh = make_shared<Mesh>();
 
+	bool includesTexture = false;
+	bool includesNormals = false;
+
 	pugi::xml_document doc;
 	pugi::xml_parse_result result = doc.load_file(filename);
 	if (result) {
@@ -147,11 +150,25 @@ std::shared_ptr<Mesh> Mesh::load(
 			// Iteramos por todos los buffers
 			pugi::xml_node materialNode = bufferNode.child("material");
 
+			std::shared_ptr<Texture> texture;
 			std::string textureName = materialNode.child("texture").text().as_string();
+			if (textureName != "")
+			{
+				std::string fullTextureName = extractPath(filename) + textureName;
+				texture = Texture::load(fullTextureName.c_str());
+				includesTexture = true;
+			}
 
-			std::string fullTextureName = extractPath(filename) + textureName;
+			// Color
+			std::string colorString = materialNode.child("color").text().as_string();
+			std::vector<float> colorVector = splitStr<float>(colorString, ',');
+			glm::vec4 color = glm::vec4(colorVector.at(0), colorVector.at(1),
+				colorVector.at(2), colorVector.at(3));
 
-			std::shared_ptr<Texture> texture = Texture::load(fullTextureName.c_str());
+			// shininess
+			std::string shininessString = materialNode.child("shininess").text().as_string();
+			uint8_t shininess = stoi(shininessString);
+
 
 			// Read Indices from node
 			std::string indices = bufferNode.child("indices").text().as_string();
@@ -162,26 +179,54 @@ std::shared_ptr<Mesh> Mesh::load(
 			std::vector<float> coordsVector = splitStr<float>(coords, ',');
 
 			// Read Texture Coordinates from node
-			std::string texcoords = bufferNode.child("texcoords").text().as_string();
-			std::vector<float> texCoordsVector = splitStr<float>(texcoords, ',');
+			std::vector<float> texCoordsVector;
+			if (includesTexture)
+			{
+				std::string texcoords = bufferNode.child("texcoords").text().as_string();
+				texCoordsVector = splitStr<float>(texcoords, ',');
+			}
+
+			// Read Normals from node
+			std::vector<float> normalsVector;
+			std::string normalsString = bufferNode.child("normals").text().as_string();
+			if (normalsString != "")
+			{
+				normalsVector = splitStr<float>(normalsString, ',');
+				includesNormals = true;
+			}
 
 
 			auto textCoordsIterator = texCoordsVector.begin();
 			auto coordsIterator = coordsVector.begin();
+			auto normalsIterator = normalsVector.begin();
 
 			vector<Vertex> vertexVector;
 
-			for (; textCoordsIterator != texCoordsVector.end() && coordsIterator != coordsVector.end(); coordsIterator += 3, textCoordsIterator += 2)
+			for (; coordsIterator != coordsVector.end(); 
+				coordsIterator += 3)
 			{
 				Vertex vertex;
 
 				vertex.position = glm::vec3(*coordsIterator, *(coordsIterator + 1), *(coordsIterator + 2));
-				vertex.texture = glm::vec2(*textCoordsIterator, *(textCoordsIterator + 1));
+
+				if (includesTexture)
+				{
+					vertex.texture = glm::vec2(*textCoordsIterator, *(textCoordsIterator + 1));
+					textCoordsIterator += 2;
+				}
+				
+				if (includesNormals)
+				{
+					vertex.normal = glm::vec3(*normalsIterator, *(normalsIterator + 1), *(normalsIterator + 2));
+					normalsIterator += 3;
+				}
 
 				vertexVector.push_back(vertex);
 			}
 
 			Material material = Material::Material(texture, nullptr);
+			material.setShininess(shininess);
+			material.setColor(color);
 
 
 			std::shared_ptr<Buffer> buffer = Buffer::create(vertexVector, indicesVector);

@@ -64,11 +64,24 @@ int init() {
 int createModelsInWorld(World & world)
 {
 	// Load the model from file
-	std::shared_ptr<Mesh> worldMesh = Mesh::load("data/bunny.msh.xml");
-	shared_ptr<Model> worldModel = make_shared<Model>(worldMesh);
-	worldModel->setScale(vec3(10.0f, 10.0f, 10.0f));
+	std::shared_ptr<Mesh> modelMesh = Mesh::load("data/bunny.msh.xml");
+	shared_ptr<Model> modelModel = make_shared<Model>(modelMesh);
+	modelModel->setRotation(glm::vec3(90.0f, 0.0f, 0.0f));
+	modelModel->setPosition(glm::vec3(0.025f, -0.1f, 0.0f));
+	//worldModel->setScale(vec3(10.0f, 10.0f, 10.0f));
 
-	world.addEntity(worldModel);
+	world.addEntity(modelModel);
+
+	world.setAmbient(glm::vec3(0.2, 0.2, 0.2));
+
+	std::shared_ptr<Light> directionalLight = std::make_shared<Light>(vec3(0, 0, 0), Light::Type::DIRECTIONAL, 
+		glm::vec3(1.0f, 1.0f, 1.0f), 0, glm::vec3(1.0f, 1.0f, 1.0f));
+
+	std::shared_ptr<Light> pointLight = std::make_shared<Light>(vec3(0, 5.0f, 0), Light::Type::POINT,
+		glm::vec3(1.0f, 0.0f, 0.0f), 0.2f, glm::vec3(1.0f, 1.0f, 1.0f));
+
+	world.addEntity(directionalLight);
+	world.addEntity(pointLight);
 
 	return 1;
 }
@@ -111,7 +124,8 @@ int main(int, char**) {
 
 	// Generate a camera and store it in the world
 	shared_ptr<Camera> camera = make_shared<Camera>();
-	camera->setPosition(glm::vec3(0.0f, 0.1f, 0.0f));
+	camera->setRotation(glm::vec3(0.0f, 0.0f, 0.0f));
+	camera->setPosition(glm::vec3(0.0f, 0.0f, 0.3f));
 	camera->setClearColor(glm::vec3(0.0f, 0.0f, 0.0f));
 	world.addEntity(camera);
 
@@ -172,6 +186,7 @@ int main(int, char**) {
 		camera->setRotation((currentRot + newRotation));
 		yPrev = yCurrent;
 		xPrev = xCurrent;
+		
 
 		// get updated screen size
 		int screenWidth, screenHeight;

@@ -4,10 +4,19 @@
 #include "Entity.h"
 #include "Shader.h"
 
-class Light : Entity
+class Light : public Entity
 {
-	enum Type {DIRECTIONAL = 0, POINT};
+	
 public:
+
+	enum Type { DIRECTIONAL = 0, POINT };
+
+	Light(glm::vec3 position, Type type, glm::vec3 color, float linearAttenuation, glm::vec3 direction) :
+		lightType(type), lightColor(color), linearAttenuation(linearAttenuation) {
+		this->position = position;
+		this->rotation = direction;
+	};
+
 	Type			getType() const;
 	void			setType(Type type);
 	const glm::vec3& getColor() const;

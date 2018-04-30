@@ -3,6 +3,7 @@
 #include "common.h"
 #include "Entity.h"
 #include "Camera.h"
+#include "Light.h"
 #include <vector>
 
 class World
@@ -18,8 +19,14 @@ public:
 	void update(float deltaTime);
 	void draw();
 
+	const glm::vec3& getAmbient() const;
+	void setAmbient(const glm::vec3& ambient);
+
 private:
 	std::vector<std::shared_ptr<Entity>> entitiesVector;
 	std::vector<std::shared_ptr<Camera>> camerasVector;
+
+	glm::vec3 ambientLight;
+	std::vector<std::shared_ptr<Light>> lightsVector;
 
 };

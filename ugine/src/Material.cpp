@@ -95,6 +95,23 @@ void Material::prepare()
 			shader->setInt(hasColorLoc, 0);
 		}
 	}
+
+	/*
+	uniform int numberLights;
+uniform vec4 diffuse;
+uniform int shininess;
+uniform vec3 ambientLight;
+uniform LightInfo lights[MAX_LIGHTS];
+*/
+	shader->setInt(shader->getLocation("numberLights"), State::lights.size());
+	shader->setVec4(shader->getLocation("diffuse"), materialColor);
+	shader->setInt(shader->getLocation("shininess"), materialShininess);
+	shader->setVec3(shader->getLocation("ambientLight"), State::ambient);
+
+	for (int i = 0; i < State::lights.size(); ++i)
+	{
+		State::lights.at(i)->prepare(i, getShader());
+	}
 }
 
 const glm::vec4& Material::getColor() const

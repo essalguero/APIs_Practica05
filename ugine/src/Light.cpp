@@ -1,5 +1,7 @@
 #include "Light.h"
 
+#include <string>
+
 Light::Type Light::getType() const
 {
 	return lightType;
@@ -33,4 +35,13 @@ void Light::setLinearAttenuation(float att)
 void Light::prepare(int index, std::shared_ptr<Shader>& shader) const
 {
 
+	std::string indexString = std::to_string(index);
+	std::string variableName = "lights[" + indexString + "]";
+
+	int location = shader->getLocation(variableName.c_str());
+
+	
+
+	if (location != -1)
+		std::cout << location << std::endl;
 }

@@ -10,22 +10,24 @@ const int MAX_LIGHTS = 8;
 
 struct LightInfo                                                           
 {  
-    int lightType;
-	vec3 lightColor;
+    float lightType;
+	vec4 lightColor;
 	float linearAttenuation;
 
-	vec3 position;
-	vec3 rotation;
-	vec3 scale;
-};
+	vec4 position;
+	vec4 rotation;
+	vec4 scale;
 
-uniform LightInfo lights[MAX_LIGHTS];
+	float padding01;
+	float padding02;
+};
 
 uniform int numberLights;
 uniform vec4 diffuse;
 uniform int shininess;
 uniform vec3 ambientLight;
 
+uniform LightInfo lights[MAX_LIGHTS];
 
 void main() {
 	if (isTexturized) {

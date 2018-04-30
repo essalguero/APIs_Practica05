@@ -157,3 +157,7 @@ int	Shader::getLocation(const char* name) const {
 
 	return location;
 }
+
+int Shader::getBlockLocation(const char* name) const {
+	glGetUniformBlockIndex(id, name);
+}

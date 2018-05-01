@@ -1,4 +1,6 @@
 //varying vec3 fcolor;
+varying vec3 N;
+varying vec4 vertexObserver;
 
 attribute vec3 vpos;
 attribute vec2 vTexture;
@@ -10,12 +12,14 @@ attribute vec3 vnormal;
 uniform mat4 mvMatrix;
 uniform mat4 normalMatrix;
 
-varying vec3 fnormal;
+//varying vec3 fnormal;
 
 void main() {
 	gl_Position = mvpMatrix * vec4(vpos, 1);
-	fnormal = normalMatrix * vec4(vnormal, 1);
-	normalize(fnormal);
+	N = normalMatrix * vec4(vnormal, 1);
+	normalize(N);
+
+	vertexObserver = mvMatrix * vec4(vpos, 1);
 	
 	fTexture = vTexture;
 }

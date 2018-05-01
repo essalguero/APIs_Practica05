@@ -103,14 +103,23 @@ uniform int shininess;
 uniform vec3 ambientLight;
 uniform LightInfo lights[MAX_LIGHTS];
 */
-	shader->setInt(shader->getLocation("numberLights"), State::lights.size());
+	int variableLocation = shader->getLocation("numberLights");
+	shader->setInt(variableLocation, State::lights.size());
+	variableLocation = shader->getLocation("diffuse");
+	shader->setVec4(variableLocation, materialColor);
+	variableLocation = shader->getLocation("shininess");
+	shader->setInt(variableLocation, materialShininess);
+	variableLocation = shader->getLocation("ambientLight");
+	shader->setVec3(variableLocation, State::ambient);
+
+	/*shader->setInt(shader->getLocation("numberLights"), State::lights.size());
 	shader->setVec4(shader->getLocation("diffuse"), materialColor);
 	shader->setInt(shader->getLocation("shininess"), materialShininess);
-	shader->setVec3(shader->getLocation("ambientLight"), State::ambient);
+	shader->setVec3(shader->getLocation("ambientLight"), State::ambient);*/
 
 	for (int i = 0; i < State::lights.size(); ++i)
 	{
-		State::lights.at(i)->prepare(i, getShader());
+		State::lights.at(i)->prepare(i, shader);
 	}
 }
 

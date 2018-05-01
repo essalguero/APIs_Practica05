@@ -27,7 +27,7 @@ public:
 	int	getLocation(const char* name) const;
 
 	// Obtiene la localización de un bloque
-	int getBlockLocation(const char* name) const;
+	//int getBlockLocation(const char* name) const;
 
 	// Da valor a una variable uniform
 	void setInt(int loc, int val);

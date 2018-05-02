@@ -25,6 +25,9 @@ public:
 	void			setLinearAttenuation(float att);
 	void			prepare(int index, std::shared_ptr<Shader>& shader) const;
 
+
+	glm::vec4 calculateDirectional(std::shared_ptr<Light> light, glm::vec4 diffuse, int shininess);
+
 private:
 	Type lightType;
 	glm::vec3 lightColor;

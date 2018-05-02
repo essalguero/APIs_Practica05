@@ -113,7 +113,6 @@ void Shader::setInt(int loc, int val) {
 	if (loc != -1)
 	{
 		glUniform1i(loc, val);
-		std::cout << "setInt  << val: " << val << std::endl;
 	}
 }
 
@@ -158,7 +157,3 @@ int	Shader::getLocation(const char* name) const {
 
 	return location;
 }
-
-/*int Shader::getBlockLocation(const char* name) const {
-	glGetUniformBlockIndex(id, name);
-}*/

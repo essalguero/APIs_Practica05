@@ -21,7 +21,7 @@ struct LightInfo
 	int linearAttenuation;
 
 	vec4 position;
-	vec3 rotation;
+	vec4 rotation;
 };
 uniform LightInfo lights[MAX_LIGHTS];
 
@@ -75,11 +75,10 @@ vec4 calculateDirectional(int i)
 	diffuseComponent = vec4(ambientLight, 1.0f);
 	specularComponent = vec4(0, 0, 0, 1.0f);
 
-	vec3 L = -lights[i].position.xyz;
+	vec3 L = lights[i].rotation.xyz;
 
 	L = normalize(L);
 	NdotL = max(dot(N, L), 0.0f);
-
 	diffuseComponent += NdotL * lights[i].lightColor;
 
 	if (shininess > 0 && NdotL > 0.0f)
@@ -87,10 +86,10 @@ vec4 calculateDirectional(int i)
 		vec4 vertexObserverNorm = normalize(vertexObserver);
 		vec3 H = L - vertexObserverNorm;
 		H = normalize(H);
-
+		
 		float NdotH = max(dot(N, H), 0.0f);
 
-		specularComponent += pow(NdotH, shininess) * vec4(1.0f, 1.0f, 1.0f, 0.0f);
+		specularComponent += pow(NdotH, shininess);
 	}
 
 	calculated = diffuseComponent + specularComponent;
@@ -113,8 +112,6 @@ vec4 calculatePoint(int i)
 	L = normalize(L);
 	NdotL = max(dot(N, L), 0.0f);
 
-	return vec4(N, 1.0f);
-
 	diffuseComponent += NdotL * lights[i].lightColor * attenuationFactor;
 
 	if (shininess > 0 && NdotL > 0.0f)
@@ -122,10 +119,10 @@ vec4 calculatePoint(int i)
 		vec4 vertexObserverNorm = normalize(vertexObserver);
 		vec3 H = L - vertexObserverNorm;
 		H = normalize(H);
-
+		
 		float NdotH = max(dot(N, H), 0.0f);
 
-		specularComponent += pow(NdotH, shininess) * attenuationFactor * vec4(1.0f, 1.0f, 1.0f, 0.0f);
+		specularComponent += pow(NdotH, shininess) * attenuationFactor;
 	}
 
 	calculated = diffuseComponent + specularComponent;
@@ -144,16 +141,16 @@ void main()
 		{
 			if (lights[i].position.w == 1)
 				totalIlumination += calculatePoint(i);
-			//else
-			//	totalIlumination += calculateDirectional(i);
+			else
+				totalIlumination += calculateDirectional(i);
 		}
 
 		if (hasColor)
 		{
 			if (isTexturized)
 			{
-				//gl_FragColor = totalIlumination * color * texture2D(texSampler, fTexture);
-				gl_FragColor = vec4(ambientLight, 1.0f) * color;
+				gl_FragColor = totalIlumination * color * texture2D(texSampler, fTexture);
+				//gl_FragColor = vec4(ambientLight, 1.0f) * color;
 			}
 			else
 			{

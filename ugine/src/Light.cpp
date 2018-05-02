@@ -54,9 +54,12 @@ void Light::prepare(int index, std::shared_ptr<Shader>& shader) const
 	int location = shader->getLocation(variableName.c_str());
 	shader->setVec4(location, positionForShader);
 
+	glm::vec4 rotationForShader;
+	rotationForShader = glm::vec4(rotation, lightType);
+	rotationForShader = mvMatrix * positionForShader;
 	variableName = "lights[" + indexString + "].rotation";
 	location = shader->getLocation(variableName.c_str());
-	shader->setVec3(location, rotation);
+	shader->setVec4(location, rotationForShader);
 
 	variableName = "lights[" + indexString + "].linearAttenuation";
 	location = shader->getLocation(variableName.c_str());

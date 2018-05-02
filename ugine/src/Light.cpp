@@ -67,7 +67,7 @@ void Light::prepare(int index, std::shared_ptr<Shader>& shader) const
 
 	variableName = "lights[" + indexString + "].lightColor";
 	location = shader->getLocation(variableName.c_str());
-	shader->setVec3(location, lightColor);
+	shader->setVec4(location, glm::vec4(lightColor, 1.0f));
 }
 
 

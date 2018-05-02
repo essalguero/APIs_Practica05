@@ -75,7 +75,7 @@ vec4 calculateDirectional(int i)
 	diffuseComponent = vec4(ambientLight, 1.0f);
 	specularComponent = vec4(0, 0, 0, 1.0f);
 
-	vec3 L = lights[i].rotation.xyz;
+	vec3 L = -lights[i].rotation.xyz;
 
 	L = normalize(L);
 	NdotL = max(dot(N, L), 0.0f);
@@ -88,7 +88,6 @@ vec4 calculateDirectional(int i)
 		H = normalize(H);
 		
 		float NdotH = max(dot(N, H), 0.0f);
-
 		specularComponent += pow(NdotH, shininess);
 	}
 

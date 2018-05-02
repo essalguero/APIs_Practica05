@@ -74,10 +74,10 @@ int createModelsInWorld(World & world)
 
 	world.setAmbient(glm::vec3(0.2, 0.2, 0.2));
 
-	std::shared_ptr<Light> directionalLight = std::make_shared<Light>(vec3(0.0f, 1.0f, -2.0f), Light::Type::DIRECTIONAL,
+	std::shared_ptr<Light> directionalLight = std::make_shared<Light>(vec3(0.0f, 1.0f, 2.0f), Light::Type::DIRECTIONAL,
 		glm::vec3(1.0f, 1.0f, 1.0f), 0.0f, glm::vec3(1.0f, 1.0f, 1.0f));
 
-	std::shared_ptr<Light> pointLight = std::make_shared<Light>(vec3(-0.3f, 8.0f, -2.0f), Light::Type::POINT,
+	std::shared_ptr<Light> pointLight = std::make_shared<Light>(vec3(2.0f, 1.0f, 2.0f), Light::Type::POINT,
 		glm::vec3(1.0f, 0.0f, 0.0f), 0.2f, glm::vec3(1.0f, 1.0f, 1.0f));
 
 	world.addEntity(directionalLight);

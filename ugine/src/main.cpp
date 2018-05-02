@@ -67,18 +67,20 @@ int createModelsInWorld(World & world)
 	std::shared_ptr<Mesh> modelMesh = Mesh::load("data/bunny.msh.xml");
 	shared_ptr<Model> modelModel = make_shared<Model>(modelMesh);
 	modelModel->setRotation(glm::vec3(90.0f, 0.0f, 0.0f));
-	modelModel->setPosition(glm::vec3(0.025f, -0.1f, 0.0f));
+	modelModel->setPosition(glm::vec3(0.0f, 0.0f, 0.0f));
 	//worldModel->setScale(vec3(10.0f, 10.0f, 10.0f));
 
 	world.addEntity(modelModel);
 
 	world.setAmbient(glm::vec3(0.2, 0.2, 0.2));
 
-	std::shared_ptr<Light> directionalLight = std::make_shared<Light>(vec3(0.0f, 1.0f, 2.0f), Light::Type::DIRECTIONAL,
-		glm::vec3(1.0f, 1.0f, 1.0f), 0.0f, glm::vec3(1.0f, 1.0f, 1.0f));
+	std::shared_ptr<Light> directionalLight = std::make_shared<Light>(vec3(1.0f, 1.0f, 1.0f), Light::Type::DIRECTIONAL,
+		glm::vec3(.7f, .7f, .7f), 0.0f, glm::vec3(1.0f, 1.0f, 1.0f));
 
-	std::shared_ptr<Light> pointLight = std::make_shared<Light>(vec3(2.0f, 1.0f, 2.0f), Light::Type::POINT,
+	std::shared_ptr<Light> pointLight = std::make_shared<Light>(vec3(0.0f, 4.472f, 2.236f), Light::Type::POINT,
 		glm::vec3(1.0f, 0.0f, 0.0f), 0.2f, glm::vec3(1.0f, 1.0f, 1.0f));
+
+	pointLight->setRotation(glm::vec3(0.0f, 0.0f, 0.0f));
 
 	world.addEntity(directionalLight);
 	world.addEntity(pointLight);
@@ -124,8 +126,8 @@ int main(int, char**) {
 
 	// Generate a camera and store it in the world
 	shared_ptr<Camera> camera = make_shared<Camera>();
-	camera->setRotation(glm::vec3(0.0f, 0.0f, 0.0f));
-	camera->setPosition(glm::vec3(0.0f, 0.0f, 0.3f));
+	camera->setRotation(glm::vec3(-25.0f, 0.0f, 0.0f));
+	camera->setPosition(glm::vec3(0.0f, 0.25f, 0.3f));
 	camera->setClearColor(glm::vec3(0.0f, 0.0f, 0.0f));
 	world.addEntity(camera);
 
@@ -212,7 +214,9 @@ int main(int, char**) {
 			static_cast<float>(screenWidth) / static_cast<float>(screenHeight), 0.1f, 100.0f);
 		camera->setProjection(projectionMatrix);
 
-
+		// Update the light position
+		pointLight->setRotationQuat(glm::rotate(pointLight->getRotationQuat(), glm::radians(90.0f * deltaTime), glm::vec3(0.0f, 1.0f, 0.0f)));
+		
 		// Draw the objects
 		world.update(deltaTime);
 		world.draw();

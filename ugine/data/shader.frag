@@ -76,6 +76,7 @@ vec4 calculateDirectional(int i)
 	specularComponent = vec4(0, 0, 0, 1.0f);
 
 	vec3 L = -lights[i].rotation.xyz;
+	//vec3 L = lights[i].position.xyz;
 
 	L = normalize(L);
 	NdotL = max(dot(N, L), 0.0f);

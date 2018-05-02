@@ -48,9 +48,9 @@ void Light::prepare(int index, std::shared_ptr<Shader>& shader) const
 	// Pass the position in observer space
 	glm::vec4 positionForShader;
 	glm::mat4 mvMatrix = State::viewMatrix * State::modelMatrix;
-	positionForShader = glm::vec4(position, lightType);
+	positionForShader = glm::vec4(1, 1, 1, lightType);
+	positionForShader = glm::rotate(glm::translate(glm::mat4(), position), glm::angle(rotationQuat), glm::axis(rotationQuat)) * positionForShader;
 	positionForShader = mvMatrix * positionForShader;
-
 	int location = shader->getLocation(variableName.c_str());
 	shader->setVec4(location, positionForShader);
 

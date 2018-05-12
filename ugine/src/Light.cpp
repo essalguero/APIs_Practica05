@@ -36,30 +36,31 @@ void Light::setLinearAttenuation(float att)
 void Light::prepare(int index, std::shared_ptr<Shader>& shader) const
 {
 
-	/*location = shader->getLocation("numberLights");
-	shader->setInt(location, 8);
-	if (location != -1)
-	std::cout << location << std::endl;
-	*/
-
 	std::string indexString = std::to_string(index);
-	std::string variableName = "lights[" + indexString + "].position";
+	std::string variableName = "lights[" + indexString + "].lightVector";
 
-	// Pass the position in observer space
-	glm::vec4 positionForShader;
-	glm::mat4 mvMatrix = State::viewMatrix * State::modelMatrix;
-	positionForShader = glm::vec4(1, 1, 1, lightType);
-	positionForShader = glm::rotate(glm::translate(glm::mat4(), position), glm::angle(rotationQuat), glm::axis(rotationQuat)) * positionForShader;
-	positionForShader = State::viewMatrix * positionForShader;
-	int location = shader->getLocation(variableName.c_str());
-	shader->setVec4(location, positionForShader);
+	int location;
 
-	glm::vec4 rotationForShader;
-	rotationForShader = glm::vec4(rotation, lightType);
-	rotationForShader = State::viewMatrix * rotationForShader;
-	variableName = "lights[" + indexString + "].rotation";
-	location = shader->getLocation(variableName.c_str());
-	shader->setVec4(location, rotationForShader);
+	if (lightType == Type::POINT)
+	{
+		// Pass the position in observer space
+		glm::vec4 positionForShader;
+		positionForShader = glm::vec4(1, 1, 1, lightType);
+		positionForShader = glm::rotate(glm::translate(glm::mat4(), position), glm::angle(rotationQuat),
+			glm::axis(rotationQuat)) * positionForShader;
+		positionForShader = State::viewMatrix * positionForShader;
+		location = shader->getLocation(variableName.c_str());
+		shader->setVec4(location, positionForShader);
+	}
+	else
+	{
+		// Pass the direction in observer space
+		glm::vec4 rotationForShader;
+		rotationForShader = glm::vec4(rotation, lightType);
+		rotationForShader = State::viewMatrix * rotationForShader;
+		location = shader->getLocation(variableName.c_str());
+		shader->setVec4(location, rotationForShader);
+	}
 
 	variableName = "lights[" + indexString + "].linearAttenuation";
 	location = shader->getLocation(variableName.c_str());

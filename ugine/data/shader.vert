@@ -17,7 +17,7 @@ void main() {
 	gl_Position = mvpMatrix * vec4(vpos, 1);
 	vec4 tempN = normalsMatrix * vec4(vnormal, 0);
 	N = tempN.xyz;
-	normalize(N);
+	//N = normalize(N);
 
 	vertexObserver = mvMatrix * vec4(vpos, 1);
 	

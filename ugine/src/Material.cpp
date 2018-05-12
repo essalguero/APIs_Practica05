@@ -121,8 +121,6 @@ uniform LightInfo lights[MAX_LIGHTS];
 	{
 		State::lights.at(i)->prepare(i, shader);
 	}
-
-	State::lights.at(0)->calculateDirectional(State::lights.at(0), materialColor, materialShininess);
 }
 
 const glm::vec4& Material::getColor() const

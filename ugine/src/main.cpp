@@ -67,7 +67,7 @@ int createModelsInWorld(World & world)
 	std::shared_ptr<Mesh> modelMesh = Mesh::load("data/bunny.msh.xml");
 	shared_ptr<Model> modelModel = make_shared<Model>(modelMesh);
 	modelModel->setRotation(glm::vec3(90.0f, 0.0f, 0.0f));
-	modelModel->setPosition(glm::vec3(0.0f, 0.0f, 0.0f));
+	//modelModel->setPosition(glm::vec3(0.0f, 0.0f, 0.0f));
 	//worldModel->setScale(vec3(10.0f, 10.0f, 10.0f));
 
 	world.addEntity(modelModel);
@@ -75,9 +75,12 @@ int createModelsInWorld(World & world)
 	world.setAmbient(glm::vec3(0.2, 0.2, 0.2));
 
 	std::shared_ptr<Light> directionalLight = std::make_shared<Light>(vec3(1.0f, 1.0f, 1.0f), Light::Type::DIRECTIONAL,
-		glm::vec3(.6f, .6f, .6f), 0.0f, glm::vec3(1.0f, 1.0f, 1.0f));
+		glm::vec3(1.0f, 1.0f, 1.0f), 0.0f, glm::vec3(1.0f, 1.0f, 1.0f));
 
-	std::shared_ptr<Light> pointLight = std::make_shared<Light>(vec3(0.0f, 4.472f, 2.236f), Light::Type::POINT,
+	//std::shared_ptr<Light> pointLight = std::make_shared<Light>(vec3(0.0f, 4.472f, 2.236f), Light::Type::POINT,
+	//	glm::vec3(1.0f, 0.0f, 0.0f), 0.2f, glm::vec3(1.0f, 1.0f, 1.0f));
+
+	std::shared_ptr<Light> pointLight = std::make_shared<Light>(vec3(0.0f, 0.0f, 5.0f), Light::Type::POINT,
 		glm::vec3(1.0f, 0.0f, 0.0f), 0.2f, glm::vec3(1.0f, 1.0f, 1.0f));
 
 	pointLight->setRotation(glm::vec3(0.0f, 0.0f, 0.0f));
@@ -215,7 +218,10 @@ int main(int, char**) {
 		camera->setProjection(projectionMatrix);
 
 		// Update the light position
-		pointLight->setRotationQuat(glm::rotate(pointLight->getRotationQuat(), glm::radians(60.0f * deltaTime), glm::vec3(0.0f, 1.0f, 0.0f)));
+		//pointLight->setRotationQuat(glm::rotate(pointLight->getRotationQuat(), glm::radians(90.0f * deltaTime), glm::vec3(0.0f, 1.0f, 0.0f)));
+		pointLight->setRotationQuat(pointLight->getRotationQuat() * glm::quat(glm::radians(glm::vec3(0, 30 * deltaTime, 0))));
+		pointLight->setPosition(glm::vec3(0, 0, 0));
+		pointLight->move(glm::vec3(0, 0, 5));
 		
 		// Draw the objects
 		world.update(deltaTime);

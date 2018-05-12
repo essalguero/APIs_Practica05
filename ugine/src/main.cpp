@@ -75,7 +75,7 @@ int createModelsInWorld(World & world)
 	world.setAmbient(glm::vec3(0.2, 0.2, 0.2));
 
 	std::shared_ptr<Light> directionalLight = std::make_shared<Light>(vec3(1.0f, 1.0f, 1.0f), Light::Type::DIRECTIONAL,
-		glm::vec3(1.0f, 1.0f, 1.0f), 0.0f, glm::vec3(1.0f, 1.0f, 1.0f));
+		glm::vec3(0.7f, 0.7f, 0.7f), 0.0f, glm::vec3(1.0f, 1.0f, 1.0f));
 
 	//std::shared_ptr<Light> pointLight = std::make_shared<Light>(vec3(0.0f, 4.472f, 2.236f), Light::Type::POINT,
 	//	glm::vec3(1.0f, 0.0f, 0.0f), 0.2f, glm::vec3(1.0f, 1.0f, 1.0f));
@@ -219,7 +219,7 @@ int main(int, char**) {
 
 		// Update the light position
 		//pointLight->setRotationQuat(glm::rotate(pointLight->getRotationQuat(), glm::radians(90.0f * deltaTime), glm::vec3(0.0f, 1.0f, 0.0f)));
-		pointLight->setRotationQuat(pointLight->getRotationQuat() * glm::quat(glm::radians(glm::vec3(0, 30 * deltaTime, 0))));
+		pointLight->setRotationQuat(pointLight->getRotationQuat() * glm::quat(glm::radians(glm::vec3(0, -30 * deltaTime, 0))));
 		pointLight->setPosition(glm::vec3(0, 0, 0));
 		pointLight->move(glm::vec3(0, 0, 5));
 		

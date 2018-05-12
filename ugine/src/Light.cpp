@@ -56,7 +56,7 @@ void Light::prepare(int index, std::shared_ptr<Shader>& shader) const
 
 	glm::vec4 rotationForShader;
 	rotationForShader = glm::vec4(rotation, lightType);
-	rotationForShader = mvMatrix * positionForShader;
+	rotationForShader = State::viewMatrix * rotationForShader;
 	variableName = "lights[" + indexString + "].rotation";
 	location = shader->getLocation(variableName.c_str());
 	shader->setVec4(location, rotationForShader);

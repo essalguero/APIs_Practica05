@@ -43,16 +43,12 @@ struct calculatedLight
 	vec4 calculated;
 	vec4 diffuseComponent = vec4(ambientLight, 1.0);
 	vec4 specularComponent = vec4(0, 0, 0, 1.0);
-
 	vec3 normalizedN = normalize(N);
-
 	vec3 L = -lights[i].rotation.xyz;
 	//vec3 L = lights[i].position.xyz;
-
 	L = normalize(L);
 	NdotL = max(dot(normalizedN, L), 0.0);
 	diffuseComponent += NdotL * lights[i].lightColor;
-
 	if (shininess > 0 && NdotL > 0.0)
 	{
 		vec4 vertexObserverNorm = normalize(vertexObserver);
@@ -61,37 +57,26 @@ struct calculatedLight
 		
 		float NdotH = max(dot(normalizedN, H), 0.0);
 		specularComponent += pow(NdotH, float(shininess));
-
 	}
 	//calculated = diffuseComponent;
 	//calculated = specularComponent;
 	calculated = diffuseComponent + specularComponent;
-
 	return calculated;
 }
-
 vec4 calculatePoint(int i)
 {
 	vec4 calculated;
 	vec4 diffuseComponent = vec4(ambientLight, 1.0);
 	vec4 specularComponent = vec4(0.0, 0.0, 0.0, 1.0);
-
 	calculatedLight currentLightInfo;
-
 	vec3 normalizedN = normalize(N);
-
 	vec3 L = lights[i].position.xyz;
-
 	float attenuationFactor = 1.0;
-
 	L = L - vertexObserver.xyz;
 	attenuationFactor = 1.0 / (1.0 + (lights[i].linearAttenuation * length(L)));
 	L = normalize(L);
 	NdotL = max(dot(normalizedN, L), 0.0);
-
 	diffuseComponent += NdotL * lights[i].lightColor * attenuationFactor;
-
-
 	if ((shininess > 0) && (NdotL > 0.0))
 	{
 		vec4 vertexObserverNorm = normalize(vertexObserver);
@@ -99,10 +84,8 @@ vec4 calculatePoint(int i)
 		H = normalize(H);
 		
 		float NdotH = max(dot(normalizedN, H), 0.0);
-
 		specularComponent += pow(NdotH, float(shininess)) * attenuationFactor;
 	}
-
 	calculated = diffuseComponent + specularComponent;
 	return calculated;
 }*/
@@ -217,4 +200,3 @@ void main()
 		}
 	}
 }
-
